@@ -1,0 +1,59 @@
+# Dockerfile.template for balena managed TAKNUC Containers
+# - See Dockerfile for non-balena TAKNUC Containers
+#
+# Author: Greg Albrecht W2GMD <oss@undef.net>
+# Copyright: Copyright 2021 Orion Labs, Inc.
+# License: Apache License, Version 2.0
+# Source: https://github.com/ampledata/TAKNUC
+#
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3.8-buster-build
+
+# For debugging:
+RUN install_packages netcat nmap vim
+
+# CoT App Docker variables:
+ENV COT_APP=spotcot
+ENV APP_BRANCH=main
+ENV PYCOT_BRANCH=main
+ENV PYTAK_BRANCH=main
+ENV TICKLE_VER=a
+
+# CoT App Docker boilerplate:
+
+# Deps:
+WORKDIR /app/build-deps
+
+RUN git clone https://github.com/ampledata/pycot.git && \
+  cd pycot && \
+  git checkout ${PYCOT_BRANCH} && \
+  python setup.py install
+
+RUN git clone https://github.com/ampledata/pytak.git && \
+  cd pytak && \
+  git checkout ${PYTAK_BRANCH} && \
+  python setup.py install
+
+WORKDIR /app
+
+RUN rm -rf /app/build-deps
+
+# App:
+WORKDIR /app/build
+
+RUN git clone https://github.com/ampledata/${COT_APP}.git && \
+  cd ${COT_APP} && \
+  git checkout ${APP_BRANCH} && \
+  python setup.py install
+
+WORKDIR /app
+
+RUN rm -rf /app/build
+
+# Startup:
+COPY docker-entrypoint.sh .
+COPY run_app.sh .
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
+
+CMD ["app"]

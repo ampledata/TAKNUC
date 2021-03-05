@@ -1,0 +1,29 @@
+# Dockerfile.template for balena managed TAKNUC Containers
+# - See Dockerfile for non-balena TAKNUCContainers
+#
+# Author: Greg Albrecht W2GMD <oss@undef.net>
+# Copyright: Copyright 2021 Orion Labs, Inc.
+# License: Apache License, Version 2.0
+# Source: https://github.com/ampledata/TAKNUC
+#
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-node:12-buster-build
+# FROM nodered/node-red:latest-12
+
+RUN JOBS=MAX install_packages python3-pip
+
+ENV NPM_TOKEN=${NPM_TOKEN}
+
+WORKDIR /app
+
+COPY docker-entrypoint.sh docker-entrypoint.sh
+COPY run_app.sh run_app.sh
+COPY npmrc /root/.npmrc
+COPY settings.js settings.js
+COPY package.json package.json
+
+RUN JOBS=MAX npm install --production --unsafe-perm
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
+
+CMD ["app"]

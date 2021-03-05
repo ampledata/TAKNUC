@@ -1,0 +1,42 @@
+version: '2'
+volumes:
+  persist-data:
+services:
+ freetakserver:
+    build: ./freetakserver
+    restart: always
+    volumes:
+      - "persist-data:/persist-data"
+    ports:
+      - "8080:8080"
+      - "8087:8087"
+ aprscot:
+    build: ./aprscot
+    restart: always
+ aiscot:
+    build: ./aiscot
+    restart: always
+    ports:
+      - "5050:5050/udp"
+ adsbcot:
+    build: ./adsbcot
+    restart: always
+ stratuxcot:
+    build: ./stratuxcot
+    restart: always
+ adsbxcot:
+    build: ./adsbxcot
+    restart: always
+ nginx-proxy:
+    build: ./nginx-proxy
+    restart: always
+    network_mode: host
+    volumes:
+      - "persist-data:/persist-data"
+ node-red:
+    build: ./node-red
+    restart: always
+    volumes:
+      - "persist-data:/persist-data"
+    ports:
+      - "1880:1880"

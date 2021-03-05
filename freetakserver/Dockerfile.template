@@ -1,0 +1,33 @@
+# Dockerfile.template for balena managed TAKNUC Containers
+# - See Dockerfile for non-balena TAKNUCContainers
+#
+# Author: Greg Albrecht W2GMD <oss@undef.net>
+# Copyright: Copyright 2021 Orion Labs, Inc.
+# License: Apache License, Version 2.0
+# Source: https://github.com/ampledata/TAKNUC
+#
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3.8-buster-build
+
+RUN install_packages libxml2-dev libxslt-dev libcairo2-dev vim
+
+RUN pip3 install FreeTAKServer[ui]
+
+WORKDIR /freetakserver
+
+# Startup:
+COPY docker-entrypoint.sh .
+COPY run_app.sh .
+
+RUN mkdir -p /persist-data/freetakserver
+RUN mkdir -p /usr/local/lib/python3.8/dist-packages/FreeTAKServer/ExCheck
+RUN mkdir -p /usr/local/lib/python3.8/dist-packages/FreeTAKServer/certs
+
+
+WORKDIR /persist-data/freetakserver
+
+ENV FTS_DB_PATH /persist-data/freetakserver/FTSDataBase.db
+
+ENTRYPOINT ["/freetakserver/docker-entrypoint.sh"]
+
+CMD ["/freetakserver/run_app.sh"]

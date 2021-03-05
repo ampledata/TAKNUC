@@ -1,0 +1,24 @@
+# Dockerfile.template for balena managed TAKNUC Containers
+# - See Dockerfile for non-balena TAKNUCContainers
+#
+# Author: Greg Albrecht W2GMD <oss@undef.net>
+# Copyright: Copyright 2021 Orion Labs, Inc.
+# License: Apache License, Version 2.0
+# Source: https://github.com/ampledata/TAKNUC
+#
+
+FROM balenalib/%%RESIN_MACHINE_NAME%%-debian
+
+RUN install_packages nginx
+
+WORKDIR /nginx-proxy
+
+COPY nginx.conf.template .
+
+# Startup:
+COPY docker-entrypoint.sh .
+COPY run_app.sh .
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
+
+CMD ["app"]
