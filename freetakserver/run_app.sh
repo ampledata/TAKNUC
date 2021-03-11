@@ -11,10 +11,14 @@ set -e
 
 echo "Inside run_app.sh"
 
-echo "Starting FTS"
+FTS_ARGS="${FTS_ARGS} -AutoStart True -CoTIP 0.0.0.0 -RestAPIIP 0.0.0.0"
 
-python3 -m FreeTAKServer.controllers.services.FTS \
-  -DataPackageIP 0.0.0.0 \
-  -CoTIP 0.0.0.0 \
-  -RestAPIIP 0.0.0.0 \
-  -AutoStart True
+if [ -z "${FTS_DATA_PACKAGE_HOST}" ]; then
+  ARGS="${FTS_ARGS} -DataPackageIP 0.0.0.0"
+else
+  ARGS="${FTS_ARGS} -DataPackageIP ${FTS_DATA_PACKAGE_HOST}"
+fi
+
+echo "Starting FTS with ARGS='${ARGS}'"
+
+python3 -m FreeTAKServer.controllers.services.FTS ${ARGS}

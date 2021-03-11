@@ -4,12 +4,21 @@ volumes:
 services:
  freetakserver:
     build: ./freetakserver
-    restart: always
+    restart: unless-stopped
     volumes:
       - "persist-data:/persist-data"
     ports:
       - "8080:8080"
       - "8087:8087"
+      - "8089:8089"
+ freetakserver-ui:
+    command: balena-idle
+    build: ./freetakserver
+    restart: unless-stopped
+    volumes:
+      - "persist-data:/persist-data"
+    ports:
+      - "5000:5000"
  aprscot:
     build: ./aprscot
     restart: always
