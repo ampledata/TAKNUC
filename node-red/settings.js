@@ -124,7 +124,7 @@ module.exports = {
         type: "credentials",
         users: [{
             username: process.env.NODE_RED_USERNAME,
-            password: "$2b$08$kpRV364ug.hyBim7RyMGe.Fy/2MUBKP3KBMpoeX/qZlcI4Kgd7nS2",
+            password: process.env.NODE_RED_PASSWORD,
             permissions: "*"
         }]
     },
