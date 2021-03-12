@@ -25,4 +25,5 @@ echo "Starting FTS with ARGS='${ARGS}'"
 
 # "gunicorn", "--config", "gunicorn-cfg.py", "run:app"
 
+# SQLALCHEMY_DATABASE_URI=sqlite:////persist-data/freetakserver/FTSDataBase.db gunicorn --config gunicorn-cfg.py run:app
 gunicorn --config gunicorn-cfg.py run:app

@@ -11,19 +11,22 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3.8-buster-build
 
 RUN install_packages libxml2-dev libxslt-dev libcairo2-dev vim
 
+ENV SX=1
 RUN pip3 install FreeTAKServer[ui]
 
-WORKDIR /freetakserver
+WORKDIR /fts-ui/
 
 # Startup:
 COPY docker-entrypoint.sh .
 COPY run_app.sh .
+COPY config.py .
 COPY config.py /usr/local/lib/python3.8/site-packages/FreeTAKServer-UI/config.py
 
 ENV FLASK_APP /usr/local/lib/python3.8/site-packages/FreeTAKServer-UI/run.py
 
 WORKDIR /usr/local/lib/python3.8/site-packages/FreeTAKServer-UI
 
-ENTRYPOINT ["/freetakserver-ui/docker-entrypoint.sh"]
+ENTRYPOINT ["/fts-ui/docker-entrypoint.sh"]
 
-CMD ["/freetakserver-ui/run_app.sh"]
+# CMD ["/freetakserver-ui/run_app.sh"]
+CMD ["balena-idle"]
