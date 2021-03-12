@@ -19,15 +19,10 @@ WORKDIR /freetakserver
 COPY docker-entrypoint.sh .
 COPY run_app.sh .
 
-RUN mkdir -p /persist-data/freetakserver
-RUN mkdir -p /usr/local/lib/python3.8/dist-packages/FreeTAKServer/ExCheck
-RUN mkdir -p /usr/local/lib/python3.8/dist-packages/FreeTAKServer/certs
-
-WORKDIR /persist-data/freetakserver
-
-ENV FTS_DB_PATH /persist-data/freetakserver/FTSDataBase.db
 ENV FLASK_APP /usr/local/lib/python3.8/site-packages/FreeTAKServer-UI/run.py
 
-ENTRYPOINT ["/freetakserver/docker-entrypoint.sh"]
+WORKDIR /usr/local/lib/python3.8/site-packages/FreeTAKServer-UI
 
-CMD ["/freetakserver/run_app.sh"]
+ENTRYPOINT ["/freetakserver-ui/docker-entrypoint.sh"]
+
+CMD ["/freetakserver-ui/run_app.sh"]

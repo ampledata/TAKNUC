@@ -13,12 +13,12 @@ services:
       - "8089:8089"
  freetakserver-ui:
     command: balena-idle
-    build: ./freetakserver
+    build: ./freetakserver-ui
     restart: unless-stopped
     volumes:
       - "persist-data:/persist-data"
     ports:
-      - "5000:5000"
+      - "5005:5005"
  aprscot:
     build: ./aprscot
     restart: always
