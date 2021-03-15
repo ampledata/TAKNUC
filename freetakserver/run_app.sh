@@ -11,12 +11,20 @@ set -e
 
 echo "Inside run_app.sh"
 
+echo "Making directories: "
+mkdir -vp ${FTS_CERTS_PATH}
+mkdir -vp ${FTS_CLIENT_CERTS_PATH}
+mkdir -vp ${ExCheckMainPath}
+mkdir -vp ${ExCheckFilePath}
+mkdir -vp ${ExCheckChecklistFilePath}
+mkdir -vp ${DataPackageFilePath}
+
 FTS_ARGS="${FTS_ARGS} -AutoStart True -CoTIP 0.0.0.0 -RestAPIIP 0.0.0.0"
 
-if [ -z "${FTS_DATA_PACKAGE_HOST}" ]; then
+if [ -z "${FTS_DP_ADDRESS}" ]; then
   ARGS="${FTS_ARGS} -DataPackageIP 0.0.0.0"
 else
-  ARGS="${FTS_ARGS} -DataPackageIP ${FTS_DATA_PACKAGE_HOST}"
+  ARGS="${FTS_ARGS} -DataPackageIP ${FTS_DP_ADDRESS}"
 fi
 
 echo "Starting FTS with ARGS='${ARGS}'"

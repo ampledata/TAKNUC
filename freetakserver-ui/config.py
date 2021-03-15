@@ -15,35 +15,34 @@ class Config(object):
 
     # This will connect to the FTS db
     SQLALCHEMY_DATABASE_URI = os.getenv(
-        "SQLALCHEMY_DATABASE_URI", "sqlite:////root/FTSDataBase.db")
+        "SQLALCHEMY_DATABASE_URI", "sqlite:///./FTSDataBase.db")
 
     # certificates path
-    certpath = os.getenv(
-        "FTS_CERT_PATH",
-        "/usr/local/lib/python3.8/dist-packages/FreeTAKServer/certs/")
+    certpath = os.getenv("FTS_CERTS_PATH", "certs")
 
     # crt file path
-    crtfilepath = f"{certpath}pubserver.pem"
+    crtfilepath = f"{certpath}/pubserver.pem"
 
     # key file path
-    keyfilepath = f"{certpath}pubserver.key.unencrypted"
+    keyfilepath = f"{certpath}/pubserver.key.unencrypted"
 
     # this IP will be used to connect with the FTS API
-    IP = os.getenv("FTS_API_IP", "127.0.0.1")
+    IP = os.getenv("FTS_API_IP", "freetakserver")
 
     # Port the  UI uses to communicate with the API
     PORT = os.getenv("FTS_API_PORT", "19023")
 
     # the public IP your server is exposing
-    APPIP = os.getenv("FTS_PUBLIC_IP", "127.0.0.1")
+    APPIP = os.getenv("FTS_PUBLIC_IP", "freetakserver")
 
     # this port will be used to listen
-    APPPort = os.getenv("FTS_UI_PORT", 5000)
+    APPPort = int(os.getenv("FTS_UI_PORT", 5000))
 
     # the webSocket  key used by the UI to communicate with FTS.
     WEBSOCKETKEY = 'YourWebsocketKey'
 
-    # the API key used by the UI to comunicate with FTS. generate a new system user and then set it
+    # the API key used by the UI to comunicate with FTS.
+    # generate a new system user and then set it
     APIKEY = 'Bearer token'
 
     # For 'in memory' database, please use:

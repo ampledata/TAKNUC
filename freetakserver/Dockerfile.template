@@ -11,26 +11,22 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3.8-buster-build
 
 RUN install_packages libxml2-dev libxslt-dev libcairo2-dev vim
 
-WORKDIR /freetakserver/src
-
-RUN git clone https://github.com/FreeTAKTeam/freetakserver.git && \
-  cd freetakserver && \
-  git checkout master && \
-  python setup.py install
+RUN pip3 install FreeTAKServer[ui] requests
 
 WORKDIR /freetakserver
-
-RUN mkdir -p /persist-data/freetakserver
-RUN mkdir -p /usr/local/lib/python3.8/dist-packages/FreeTAKServer/ExCheck
-RUN mkdir -p /usr/local/lib/python3.8/dist-packages/FreeTAKServer/certs
 
 # Startup:
 COPY docker-entrypoint.sh .
 COPY run_app.sh .
-
-WORKDIR /persist-data/freetakserver
+COPY MainConfig.py /usr/local/lib/python3.8/site-packages/FreeTAKServer/controllers/configuration/MainConfig.py
 
 ENV FTS_DB_PATH /persist-data/freetakserver/FTSDataBase.db
+ENV FTS_CERTS_PATH /persist-data/freetakserver/certs
+ENV FTS_CLIENT_CERTS_PATH /persist-data/freetakserver/certs/ClientPackages
+ENV ExCheckMainPath /persist-data/freetakserver/ExCheck
+ENV ExCheckFilePath /persist-data/freetakserver/ExCheck/template
+ENV ExCheckChecklistFilePath /persist-data/freetakserver/ExCheck/checklist
+ENV DataPackageFilePath /persist-data/freetakserver/FreeTAKServerDataPackageFolder
 
 ENTRYPOINT ["/freetakserver/docker-entrypoint.sh"]
 

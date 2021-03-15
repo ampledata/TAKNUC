@@ -11,8 +11,8 @@ services:
       - "8080:8080"
       - "8087:8087"
       - "8089:8089"
+      - "19023:19023"
  fts-ui:
-    command: balena-idle
     build: ./freetakserver-ui
     restart: unless-stopped
     volumes:

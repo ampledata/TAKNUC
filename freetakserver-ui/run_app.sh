@@ -11,19 +11,9 @@ set -e
 
 echo "Inside run_app.sh"
 
-FTS_ARGS="${FTS_ARGS} -AutoStart True -CoTIP 0.0.0.0 -RestAPIIP 0.0.0.0"
+FTS_ARGS="${FTS_ARGS} --config gunicorn-cfg.py run:app"
 
-if [ -z "${FTS_DATA_PACKAGE_HOST}" ]; then
-  ARGS="${FTS_ARGS} -DataPackageIP 0.0.0.0"
-else
-  ARGS="${FTS_ARGS} -DataPackageIP ${FTS_DATA_PACKAGE_HOST}"
-fi
+echo "Starting FTS-UI with ARGS='${FTS_ARGS}'"
 
-echo "Starting FTS with ARGS='${ARGS}'"
-
-#python3 -m FreeTAKServer.controllers.services.FTS ${ARGS}
-
-# "gunicorn", "--config", "gunicorn-cfg.py", "run:app"
-
-# SQLALCHEMY_DATABASE_URI=sqlite:////persist-data/freetakserver/FTSDataBase.db gunicorn --config gunicorn-cfg.py run:app
-gunicorn --config gunicorn-cfg.py run:app
+export SQLALCHEMY_DATABASE_URI=sqlite:////persist-data/freetakserver/FTSDataBase.db
+gunicorn ${FTS_ARGS}
