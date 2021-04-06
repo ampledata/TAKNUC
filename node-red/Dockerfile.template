@@ -10,20 +10,16 @@
 FROM balenalib/%%BALENA_MACHINE_NAME%%-node:12-buster-build
 # FROM nodered/node-red:latest-12
 
-RUN JOBS=MAX install_packages python3-pip
+RUN JOBS=MAX install_packages python3-pip git
 
-ENV NPM_TOKEN=${NPM_TOKEN}
+WORKDIR /node-red-ampledata
 
-WORKDIR /app
+RUN git clone https://github.com/ampledata/node-red-ampledata.git .
 
-COPY docker-entrypoint.sh docker-entrypoint.sh
-COPY run_app.sh run_app.sh
-COPY npmrc /root/.npmrc
-COPY settings.js settings.js
-COPY package.json package.json
+RUN chmod +x run_node-red.sh docker-entrypoint.sh
 
 RUN JOBS=MAX npm install --production --unsafe-perm
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
 
-CMD ["app"]
+CMD ["node-red"]
