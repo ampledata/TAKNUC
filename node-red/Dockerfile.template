@@ -14,6 +14,8 @@ RUN JOBS=MAX install_packages python3-pip git
 
 WORKDIR /node-red-ampledata
 
+ENV VERSION_TOUCH=2
+
 RUN git clone https://github.com/ampledata/node-red-ampledata.git .
 
 RUN chmod +x run_node-red.sh docker-entrypoint.sh

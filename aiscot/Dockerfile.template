@@ -12,43 +12,21 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3.8-buster-build
 # For debugging:
 RUN install_packages netcat nmap vim
 
-# CoT App Docker variables:
-ENV COT_APP=aiscot
-ENV APP_BRANCH=main
-ENV PYCOT_BRANCH=main
-ENV PYTAK_BRANCH=main
-ENV TICKLE_VER=a
+ENV TICKLE_VERSION=1
 
-# CoT App Docker boilerplate:
+ENV PYTAK_PACKAGE=https://github.com/ampledata/pytak/releases/download/v3.5.0b2/python3-pytak_3.5.0b2-1_all.deb
 
-# Deps:
-WORKDIR /app/build-deps
-
-RUN git clone https://github.com/ampledata/pycot.git && \
-  cd pycot && \
-  git checkout ${PYCOT_BRANCH} && \
-  python setup.py install
-
-RUN git clone https://github.com/ampledata/pytak.git && \
-  cd pytak && \
-  git checkout ${PYTAK_BRANCH} && \
-  python setup.py install
+ENV APP_PACKAGE=https://github.com/ampledata/aiscot/releases/download/v3.1.0b1/python3-aiscot_3.1.0b1-1_all.deb
 
 WORKDIR /app
 
-RUN rm -rf /app/build-deps
+RUN wget -O pytak.deb ${PYTAK_PACKAGE}
+RUN apt install -f ./pytak.deb
 
-# App:
-WORKDIR /app/build
-
-RUN git clone https://github.com/ampledata/${COT_APP}.git && \
-  cd ${COT_APP} && \
-  git checkout ${APP_BRANCH} && \
-  python setup.py install
+RUN wget -O app.deb ${APP_PACKAGE}
+RUN apt install -f ./app.deb
 
 WORKDIR /app
-
-RUN rm -rf /app/build
 
 # Startup:
 COPY docker-entrypoint.sh .
